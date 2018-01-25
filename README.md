@@ -460,9 +460,9 @@ and Elixir through [kiex](https://github.com/taylor/kiex).
 ```sh
 git clone git@github.com:battle-snake/battle_snake.git`
 cd battle_snake
-yarn install
 mix do local.hex --force, local.rebar
 mix do deps.get, deps.compile
+yarn install
 mix do ecto.create, ecto.migrate
 mix phx.server
 ```
