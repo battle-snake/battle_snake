@@ -79,7 +79,7 @@ RUN mix do local.hex --force, \
     deps.compile, \
     compile
 
-RUN yarn install && yarn webpack:production || : && mix phx.digest
+RUN yarn install && yarn webpack:production && mix phx.digest
 
 RUN mix release --env=prod --verbose
 

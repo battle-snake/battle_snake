@@ -54,27 +54,56 @@ defmodule Bs.World do
     world
   end
 
-  def rand_unoccupied_space(%{width: w, height: h} = world) when w > 0 and h > 0 do
-    spaces = Stream.flat_map(world.snakes, & &1.coords)
-    spaces = Stream.concat(spaces, world.food)
-    spaces = Enum.into(spaces, MapSet.new())
-    width = world.width - 1
-    height = world.height - 1
-
-    stream =
-      Stream.flat_map(0..width, fn x ->
-        Stream.flat_map(0..height, fn y -> [p(x, y)] end)
+  def rand_unoccupied_space(
+        %{width: w, height: h} = world,
+        buffer \\ 0,
+        only_odd_squares \\ false
+      )
+      when w > 0 and h > 0 do
+    all =
+      Stream.flat_map(buffer..(world.width - buffer - 1), fn x ->
+        Stream.flat_map(buffer..(world.height - buffer - 1), fn y ->
+          if !only_odd_squares || rem(x + y, 2) == 0 do
+            [p(x, y)]
+          else
+            []
+          end
+        end)
       end)
 
-    stream = Stream.filter(stream, fn p -> !MapSet.member?(spaces, p) end)
+    occupied = get_occupied_spaces(world, buffer)
 
-    open = Enum.to_list(stream)
+    available =
+      Enum.to_list(Stream.filter(all, fn p -> !MapSet.member?(occupied, p) end))
 
-    if length(open) == 0 do
+    if length(available) == 0 do
       {:error, :empty_error}
     else
-      {:ok, Enum.random(open)}
+      {:ok, Enum.random(available)}
     end
+  end
+
+  defp get_occupied_spaces(world, buffer) do
+    spaces = Stream.flat_map(world.snakes, & &1.coords)
+    spaces = Stream.concat(spaces, world.food)
+
+    spaces =
+      case buffer do
+        0 ->
+          spaces
+
+        _ ->
+          Stream.flat_map(spaces, fn op ->
+            Stream.flat_map(-buffer..buffer, fn y ->
+              Stream.flat_map(-buffer..buffer, fn x ->
+                [p(op.x + x, op.y + y)]
+              end)
+            end)
+          end)
+      end
+
+    spaces = Enum.into(spaces, MapSet.new())
+    spaces
   end
 
   @doc "increase world.turn by 1"

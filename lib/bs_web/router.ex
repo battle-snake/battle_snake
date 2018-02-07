@@ -22,6 +22,8 @@ defmodule BsWeb.Router do
   scope "/", BsWeb do
     pipe_through(:api)
 
+    resources("/status", StatusController)
+
     post("/example/start", ExampleController, :start)
     post("/example/move", ExampleController, :move)
   end

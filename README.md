@@ -1,12 +1,10 @@
-[![CircleCI](https://circleci.com/gh/battle-snake/battle_snake.svg?style=svg)](https://circleci.com/gh/battle-snake/battle_snake)
+# The 2018 Official Game Server [![CircleCI](https://circleci.com/gh/sendwithus/battlesnake-server.svg?style=svg)](https://circleci.com/gh/sendwithus/battlesnake-server)
 
 [![BattleSnake 2018 Logo](./docs/images/logo-18.png)](https://www.battlesnake.io/)
-The 2018 Official Game Server
 
-* [Event Information](https://www.battlesnake.io/)
+## [Event Information](https://www.battlesnake.io/)
 
 ![Example Game Animation](./docs/images/game.gif)
-
 
 BattleSnake is an adaptation of the classic video game "Snake", where the player
 maneuvers a snake around the game board to collect food pellets, which makes the
@@ -17,53 +15,56 @@ In BattleSnake a number of snakes are pitted against each other and the last
 snake alive wins.
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
-**Table of Contents**
+
+### Table of Contents
 
 - [Competitors' Guide](#competitors-guide)
-    - [Game Rules](#game-rules)
-        - [Avoid Walls](#avoid-walls)
-        - [Eat Food](#eat-food)
-        - [Don't Starve](#dont-starve)
-        - [Don't Collide with Snakes' Tails](#dont-collide-with-snakes-tails)
-        - [Head on Collisions](#head-on-collisions)
-    - [Testing Your Snake](#testing-your-snake)
-    - [API Webhooks](#api-webhooks)
-        - [POST /start](#post-start)
-            - [The StartRequest Object](#the-startrequest-object)
-            - [The StartResponse Object](#the-startresponse-object)
-            - [The HeadType Type](#the-headtype-type)
-            - [The TailType Type](#the-tailtype-type)
-            - [Example Request](#example-request)
-            - [Example Response](#example-response)
-        - [POST /move](#post-move)
-            - [The MoveResponse Object](#the-moveresponse-object)
-            - [The Move type](#the-move-type)
-            - [The World object](#the-world-object)
-            - [The Snake object](#the-snake-object)
-            - [The List object](#the-list-object)
-            - [The Point object](#the-point-object)
-            - [Example Request](#example-request-1)
-            - [Example Response](#example-response-1)
+  - [Game Rules](#game-rules)
+    - [Avoid Walls](#avoid-walls)
+    - [Eat Food](#eat-food)
+    - [Don't Starve](#dont-starve)
+    - [Don't Collide with Snakes' Tails](#dont-collide-with-snakes-tails)
+    - [Head on Collisions](#head-on-collisions)
+  - [Testing Your Snake](#testing-your-snake)
+  - [API Webhooks](#api-webhooks)
+    - [POST /start](#post-start)
+      - [The StartRequest Object](#the-startrequest-object)
+      - [The StartResponse Object](#the-startresponse-object)
+      - [The HeadType Type](#the-headtype-type)
+      - [The TailType Type](#the-tailtype-type)
+      - [Example Request](#example-request)
+      - [Example Response](#example-response)
+    - [POST /move](#post-move)
+      - [The MoveResponse Object](#the-moveresponse-object)
+      - [The Move type](#the-move-type)
+      - [The World object](#the-world-object)
+      - [The Snake object](#the-snake-object)
+      - [The List object](#the-list-object)
+      - [The Point object](#the-point-object)
+      - [Example Request](#example-request-1)
+      - [Example Response](#example-response-1)
 - [Development](#development)
-    - [Running with Docker](#running-with-docker)
-    - [Networking issues](#networking-issues)
-    - [Compiling From Source](#compiling-from-source)
-        - [Dependencies](#dependencies)
-    - [Testing](#testing)
-        - [End to End Tests](#end-to-end-tests)
-        - [Unit Tests](#unit-tests)
+  - [Running with Docker](#running-with-docker)
+  - [Networking issues](#networking-issues)
+  - [Compiling From Source](#compiling-from-source)
+    - [Dependencies](#dependencies)
+  - [Testing](#testing)
+    - [End to End Tests](#end-to-end-tests)
+    - [Unit Tests](#unit-tests)
 
 <!-- markdown-toc end -->
 
-# Competitors' Guide
-## Game Rules
-### Avoid Walls
+## Competitors' Guide
+
+### Game Rules
+
+#### Avoid Walls
 
 If a snake leaves the last tile of the board, they will die.
 
-![](./docs/images/rule-wall.gif)
+![Snake leaving the last board tile hitting a wall](./docs/images/rule-wall.gif)
 
-### Eat Food
+#### Eat Food
 
 Eating a food pellet will make snakes one segment longer. Snakes grow out of
 their tail: new tail segment will appear in the same square that the tail was in
@@ -75,39 +76,36 @@ The amount of food can vary from game to game, but within the same game it will
 always stay the same. As soon as a piece of food is eaten, it will respawn at a
 random, unoccupied location on the next turn.
 
+![Snake eating food pellets](./docs/images/rule-food.gif)
 
-![](./docs/images/rule-food.gif)
-
-### Don't Starve
+#### Don't Starve
 
 Every turn snakes will loose one health-point. In BattleSnake health-points
 serve like the snake's hunger bar, and if it reaches zero, the snake will starve
 and die. Eating food will restore snake's health to one-hundred points on the
 next turn.
 
-![](./docs/images/rule-starvation.gif)
+![Snake dying of starvation](./docs/images/rule-starvation.gif)
 
-### Don't Collide with Snakes' Tails
+#### Don't Collide with Snakes' Tails
 
 If a snake collides with itself or any other snakes' tails, it dies.
 
-![](./docs/images/rule-self.gif)
+![Snake eating its own body](./docs/images/rule-self.gif)
 
-### Head on Collisions
+#### Head on Collisions
 
 Head-to-head collisions follow different rules than the previously mentioned
 tail collisions.
 
 In head-on collisions, the longer snake will survive.
 
-![](./docs/images/rule-head-longer.gif)
+![Snake head-on collision](./docs/images/rule-head-longer.gif)
 
 But if both snakes are the same size, they both die. Note that in the below
 scenario, the food remains (collisions are resolved before food is eaten).
 
-![](./docs/images/rule-head-same-size.gif)
-
-
+![Snake head on collision over food pellet](./docs/images/rule-head-same-size.gif)
 
 ## Testing Your Snake
 
@@ -134,7 +132,7 @@ then on each turn a request to the `/move` endpoint.
 
 ```typescript
 interface StartRequest {
-  game_id: string;
+  game_id: number;
 }
 ```
 
@@ -167,7 +165,7 @@ String referring to what head image should be used for your snake.
 Renders one of the matching images in [this directory](./assets/static/images/snake/head/).
 
 ```typescript
-type HeadType = 
+type HeadType =
   | 'bendr'
   | 'dead'
   | 'fang'
@@ -187,7 +185,7 @@ String referring to what tail image should be used for your snake.
 Renders one of the matching images in [this directory](./assets/static/images/snake/tail/).
 
 ```typescript
-type TailType = 
+type TailType =
   | 'block-bum'
   | 'curled'
   | 'fat-rattle'
@@ -198,15 +196,16 @@ type TailType =
   | 'skinny'
   | 'small-rattle'
 ```
-#### Example Request
+
+#### Example `/start` Request
 
 ```json
 {
-  "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa"
+  "game_id": 1
 }
 ```
 
-#### Example Response
+#### Example `/start` Response
 
 ```json
 {
@@ -219,7 +218,6 @@ type TailType =
     "tail_type": "pixel"
 }
 ```
-
 
 ### POST /move
 
@@ -414,51 +412,50 @@ interface Point {
 }
 ```
 
-# Development
+## Development
 
-## Running with Docker
+### Running with Docker
 
 You can run the official BattleSnake game server through Docker, allowing you to develop your snakes locally and whenever you want.
 
-
+```sh
+docker pull sendwithus/battlesnake-server
+docker run -it -p 3000:3000 sendwithus/battlesnake-server
 ```
-docker pull battlesnake/battle_snake
-docker run -it -p 3000:3000 battlesnake/battle_snake
-```
 
-You should be able to view the game server at http://localhost:3000. 
+You should be able to view the game server at <http://localhost:3000>.
 
-
-## Networking issues
+### Networking issues
 
 If you are running your snake on localhost, you won't be able to reference it as
 `localhost` because the container runs on its own network. If you're running
 Docker For Mac you can reference localhost:5678 with
-http://docker.for.mac.localhost:5678/, otherwise use your full ip address on
+<http://docker.for.mac.localhost:5678/>, otherwise use your full ip address on
 your network to reference your localhost (192.168.1.xxx or whatever your subnet
 is configured for, use ifconfig to find out).
 
-## Compiling From Source
+### Compiling From Source
 
-### Dependencies
-* [Erlang](https://www.erlang.org/downloads)
-* [Elixir](http://elixir-lang.org/install.html)
-* [NPM](http://blog.npmjs.org/post/85484771375/how-to-install-npm)
-* [Yarn](https://yarnpkg.com/lang/en/docs/install)
+#### Dependencies
 
-**MacOSX**
+- [Erlang](https://www.erlang.org/downloads)
+- [Elixir](http://elixir-lang.org/install.html)
+- [NPM](http://blog.npmjs.org/post/85484771375/how-to-install-npm)
+- [Yarn](https://yarnpkg.com/lang/en/docs/install)
+
+#### MacOSX
 
 ```sh
 brew update && brew install erlang elixir nodejs yarn
 ```
 
-**Linux**
+#### Linux
 
 I suggest installing Erlang through [evm](https://github.com/robisonsantos/evm)
 and Elixir through [kiex](https://github.com/taylor/kiex).
 
 ```sh
-git clone git@github.com:battle-snake/battle_snake.git`
+git clone git@github.com:sendwithus/battlesnake-server.git`
 cd battle_snake
 yarn install
 mix do local.hex --force, local.rebar
@@ -468,13 +465,17 @@ mix phx.server
 ```
 
 ## Testing
+
 ### End to End Tests
+
 ```sh
 yarn cypress:open
 ```
+
 ### Unit Tests
+
 ```sh
 mix test
 ```
 
-Spotted an inaccuracy in the document, think they suck, or have a suggestion on how to make it better? Open an [issue](https://github.com/battle-snake/battle_snake/issues), or even better submit a [PR](https://github.com/battle-snake/battle_snake/pulls)!
+Spotted an inaccuracy in the document, think they suck, or have a suggestion on how to make it better? Open an [issue](https://github.com/sendwithus/battlesnake-server/issues), or even better submit a [PR](https://github.com/sendwithus/battlesnake-server/pulls)!

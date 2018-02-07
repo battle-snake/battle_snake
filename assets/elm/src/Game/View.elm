@@ -270,14 +270,14 @@ playPause { gameState } =
                             [ onClick (Push ResumeGame)
                             , title "Resume game (h)"
                             ]
-                            [ mdPause ]
+                            [ mdPlayArrow ]
 
                     Cont ->
                         btn
                             [ onClick (Push PauseGame)
                             , title "Pause game (l)"
                             ]
-                            [ mdPlayArrow ]
+                            [ mdPause ]
 
 
 column : List (Attribute msg) -> List (Html msg) -> Html msg
