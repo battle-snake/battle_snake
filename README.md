@@ -408,7 +408,7 @@ docker pull battlesnake/battle_snake
 docker run -it -p 3000:3000 battlesnake/battle_snake
 ```
 
-You should be able to view the game server at http://localhost:3000. 
+You should be able to view the game server at <a href="http://localhost:3000" target="_blank">http://localhost:3000</a>. 
 
 ## Networking issues
 
