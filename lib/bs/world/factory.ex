@@ -43,7 +43,7 @@ defmodule Bs.World.Factory do
 
     update_in(world.snakes, fn snakes ->
       for snake <- snakes do
-        {:ok, point} = World.rand_unoccupied_space(world)
+        {:ok, point} = World.rand_unoccupied_space(world, 1, true)
 
         coords = List.duplicate(point, game.snake_start_length)
 
